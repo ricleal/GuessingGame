@@ -1,0 +1,8 @@
+Flask
+python-dotenv
+
+# test
+pytest
+
+# production
+gunicorn
