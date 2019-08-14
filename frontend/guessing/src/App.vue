@@ -1,27 +1,28 @@
 <template>
-  <div id="app">
-    <Game msg="Welcome to the Guessing Game"/>
-  </div>
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Guessing</span>
+        <span class="font-weight-light">Game</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
+    <v-content>
+      <Game />
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import Game from './components/Game.vue'
+import Game from "./components/Game";
 
 export default {
-  name: 'app',
+  name: "App",
   components: {
     Game
-  }
-}
+  },
+  data: () => ({
+    //
+  })
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
