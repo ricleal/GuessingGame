@@ -53,12 +53,15 @@ def less(number):
     else:
         return jsonify(success=False)
 
+
 @api.route('/guess/<int:number>')
 def guess(number):
     ''' Try to see if it is a guess '''
     value = session.get('guess', None)
     if value is not None:
         guess = value == number
+        if guess:
+            del session['guess']
         return jsonify(success=True, guess=guess)
     else:
         return jsonify(success=False)
