@@ -9,7 +9,7 @@
       </v-flex>
     </v-layout>
 
-    <v-form ref="form" v-model="formStartValid">
+    <v-form ref="formStart" @submit.prevent v-model="formStartValid">
       <v-layout row align-center justify-space-between>
         <v-flex md2 xs12 offset-md3>
           <v-text-field
@@ -37,7 +37,7 @@
           ></v-text-field>
         </v-flex>
         <v-flex md2 xs12>
-          <v-btn :disabled="!formStartValid" @click="startGame">Start the Game</v-btn>
+          <v-btn type="sumit" :disabled="!formStartValid" @click="startGame">Start the Game</v-btn>
         </v-flex>
         <v-flex md2 />
       </v-layout>
@@ -57,7 +57,7 @@
         </v-flex>
       </v-layout>
 
-      <v-form ref="form" v-model="formLessValid">
+      <v-form @submit.prevent ref="formLess" v-model="formLessValid">
         <v-layout row align-center justify-space-around>
           <v-flex md3 xs12 offset-md2>
             <v-text-field
@@ -69,13 +69,13 @@
             ></v-text-field>
           </v-flex>
           <v-flex md3 xs12>
-            <v-btn :disabled="!formLessValid" @click="isLessThan" color="primary">Less than</v-btn>
+            <v-btn type="submit" :disabled="!formLessValid" @click="isLessThan" color="primary">Less than</v-btn>
           </v-flex>
           <v-flex md1 xs12 />
         </v-layout>
       </v-form>
 
-      <v-form ref="form" v-model="formGreaterValid">
+      <v-form @submit.prevent ref="formGreater" v-model="formGreaterValid">
         <v-layout row align-center justify-space-around>
           <v-flex md3 xs12 offset-md2>
             <v-text-field
@@ -87,7 +87,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex md3 xs12>
-            <v-btn :disabled="!formGreaterValid" @click="isGreaterThan" color="primary">Greater than</v-btn>
+            <v-btn type="submit" :disabled="!formGreaterValid" @click="isGreaterThan" color="primary">Greater than</v-btn>
           </v-flex>
           <v-flex md1 xs12 />
         </v-layout>
@@ -106,7 +106,7 @@
         <v-flex md3 xs12 />
       </v-layout>
 
-      <v-form ref="form" v-model="formGuessValid">
+      <v-form ref="formGuess" @submit.prevent v-model="formGuessValid">
         <v-layout row align-center justify-space-around>
           <v-flex md12>
             <p>&nbsp;</p>
@@ -121,7 +121,12 @@
             ></v-text-field>
           </v-flex>
           <v-flex md1 xs12>
-            <v-btn :disabled="!formGuessValid" @click="guess" color="warning">Guess it?</v-btn>
+            <v-btn
+              type="submit"
+              :disabled="!formGuessValid"
+              @click="guess"
+              color="warning"
+            >Guess it?</v-btn>
           </v-flex>
           <v-flex md3 xs12 />
         </v-layout>
@@ -148,7 +153,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog = false">OK</v-btn>
+            <v-btn color="primary" text @keyup.enter="dialog = false" @click="dialog = false">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -194,11 +199,23 @@ export default {
         : "Minimum must be inferior to Maximum";
     },
     startGame: function() {
-      Vue.axios.get("/api/start/1/10").then(response => {
-        console.log(response.data);
-      });
-      this.start = true;
-      this.message = `Start: Guessing a number from ${this.minimumValue} to ${this.maximumValue}.`;
+      Vue.axios
+        .get(`/api/start/${this.minimumValue}/${this.maximumValue}`)
+        .then(response => {
+          if (
+            response.data["success"] == null ||
+            response.data["success"] == false
+          ) {
+            this.message = "Something wrong!";
+          } else {
+            this.start = true;
+            this.message = `Start: Guessing a number from ${this.minimumValue} to ${this.maximumValue}.`;
+          }
+        })
+        .catch(error => {
+          // handle error
+          console.log(error);
+        });
     },
 
     isEven: function() {
@@ -211,7 +228,6 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            console.log(response.data);
             this.message = `Is even? ${response.data["even"]}!`;
           }
         })
@@ -230,7 +246,6 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            console.log(response.data);
             this.message = `Is odd? ${response.data["odd"]}!`;
           }
         })
@@ -250,7 +265,6 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            console.log(response.data);
             this.message = `Is less than ${this.lessThanValue}? ${
               response.data["less"]
             }!`;
@@ -271,7 +285,6 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            console.log(response.data);
             this.message = `Is greater than ${this.greaterThanValue}? ${
               response.data["greater"]
             }!`;
@@ -293,7 +306,6 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            console.log(response.data);
             if (response.data["guess"]) {
               this.dialog = true;
               this.start = false;

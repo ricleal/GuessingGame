@@ -1,6 +1,6 @@
 
-from orders import create_app
-from orders.config import ProductionConfig
+from app import create_app
+from app.config import ProductionConfig
 app = create_app(ProductionConfig)
 
 if __name__ == '__main__':
