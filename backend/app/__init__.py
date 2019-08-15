@@ -1,3 +1,4 @@
+import os
 import logging
 from flask import Flask
 from .config import Config
@@ -14,7 +15,12 @@ logger = logging.getLogger(__name__)
 
 def create_app(config_class=Config):
     """Construct the core application."""
-    app = Flask(__name__)
+    app = Flask(__name__,
+                static_url_path='/static',
+                static_folder=os.path.join(
+                    os.path.dirname(__file__) ,
+                    "..", "..", "frontend", "guessing", "dist"
+                ))
     app.config.from_object(config_class)
     app.register_blueprint(api)
 

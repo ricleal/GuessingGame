@@ -14,6 +14,7 @@
           type="number"
           label="Minimum"
           v-model="minimumValue"
+          :rules="minimumRules"
           min="1"
           max="50"
           required
@@ -26,6 +27,7 @@
           v-model="maximumValue"
           min="1"
           max="50"
+          id="maximumId"
           required
         ></v-text-field>
       </v-flex>
@@ -99,6 +101,22 @@
         <h2>{{message}}</h2>
       </v-flex>
     </v-layout>
+
+    <div class="text-center">
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-card-title class="headline grey lighten-2" primary-title>Congratulations!!!</v-card-title>
+          <v-card-text><br/>You guessed the number. Now you can play another game!</v-card-text>
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialog = false">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+
   </v-container>
 </template>
 
@@ -114,8 +132,10 @@ export default {
     greaterThanValue: null,
     lessThanValue: null,
     guessValue: null,
+    dialog: false,
     start: false,
-    message: ""
+    message: "",
+    minimumRules: [v => !!v || "Minimum is required"]
   }),
   methods: {
     startGame: function() {
@@ -123,9 +143,11 @@ export default {
         console.log(response.data);
       });
       this.start = true;
-      this.message = "Start!";
+      this.message = `Start! Guessing a number from ${this.minimumValue} to ${this.maximumValue}.`;
     },
-    guess: function() {},
+    guess: function() {
+      this.dialog = true;
+    },
     isEven: function() {
       Vue.axios
         .get("/api/even")
@@ -166,32 +188,54 @@ export default {
     },
 
     isLessThan: function() {
-      if (this.lessThanValue == null){
+      if (this.lessThanValue == null) {
         this.message = "I need a value in field...";
-      }
-      else {
-      Vue.axios
-        .get(`/api/less/${this.lessThanValue}`)
-        .then(response => {
-          if (
-            response.data["success"] == null ||
-            response.data["success"] == false
-          ) {
-            this.message = "Something wrong!";
-          } else {
-            console.log(response.data);
-            this.message = `Is less than ${this.lessThanValue}? ${response.data["less"]}!`;
-          }
-        })
-        .catch(error => {
-          // handle error
-          console.log(error);
-        });
+      } else {
+        Vue.axios
+          .get(`/api/less/${this.lessThanValue}`)
+          .then(response => {
+            if (
+              response.data["success"] == null ||
+              response.data["success"] == false
+            ) {
+              this.message = "Something wrong!";
+            } else {
+              console.log(response.data);
+              this.message = `Is less than ${this.lessThanValue}? ${
+                response.data["less"]
+              }!`;
+            }
+          })
+          .catch(error => {
+            // handle error
+            console.log(error);
+          });
       }
     },
-    isGreaterThan: function(value) {
-      /* eslint-disable no-console */
-      console.log(value);
+    isGreaterThan: function() {
+      if (this.greaterThanValue == null) {
+        this.message = "I need a value in field...";
+      } else {
+        Vue.axios
+          .get(`/api/greater/${this.greaterThanValue}`)
+          .then(response => {
+            if (
+              response.data["success"] == null ||
+              response.data["success"] == false
+            ) {
+              this.message = "Something wrong!";
+            } else {
+              console.log(response.data);
+              this.message = `Is greater than ${this.greaterThanValue}? ${
+                response.data["greater"]
+              }!`;
+            }
+          })
+          .catch(error => {
+            // handle error
+            console.log(error);
+          });
+      }
     }
   }
 };
