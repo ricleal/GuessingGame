@@ -1,3 +1,4 @@
+import os
 import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from urllib import error, request
@@ -18,10 +19,10 @@ class SimpleHTTPProxy(SimpleHTTPRequestHandler):
         cls.proxy_routes = proxy_routes
 
     def do_GET(self):
-        print("**", self.path)
         for root_from, root_to in self.proxy_routes.items():
             if self.path.startswith(root_from):
                 url = root_to + self.path
+                print("Proxy forwarding from {} to {}".format(self.path, url))
                 self.proxy_request(url)
             else:
                 super().do_GET()
@@ -41,13 +42,18 @@ class SimpleHTTPProxy(SimpleHTTPRequestHandler):
         self.copyfile(response, self.wfile)
 
 
-SimpleHTTPProxy.set_routes(routes)
+if __name__ == '__main__':
 
-with HTTPServer((host, port), SimpleHTTPProxy) as httpd:
-    host, port = httpd.socket.getsockname()
-    print(f'Listening on http://{host}:{port}')
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nKeyboard interrupt received, exiting.")
-        sys.exit(0)
+    dist_path = os.path.join(os.path.dirname(__file__), 'dist')
+    os.chdir(dist_path)
+
+    SimpleHTTPProxy.set_routes(routes)
+
+    with HTTPServer((host, port), SimpleHTTPProxy) as httpd:
+        host, port = httpd.socket.getsockname()
+        print(f'Listening on http://{host}:{port}')
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nKeyboard interrupt received, exiting.")
+            sys.exit(0)
