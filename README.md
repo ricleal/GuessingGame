@@ -50,7 +50,7 @@ gunicorn -w <number of workers> --bind <IP>:<port> run_prod:app
 # E.g.:
 gunicorn -w 2 --bind 0.0.0.0:8000 run_prod:app
 ```
-To test: https:// 0.0.0.0:8000/static/index.html
+To test: http:// 0.0.0.0:8000/static/index.html
 
 
 

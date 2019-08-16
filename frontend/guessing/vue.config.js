@@ -12,12 +12,12 @@ module.exports = {
             },
         }
     },
-    publicPath: process.env.NODE_ENV === 'production'
-        ? '/static'
-        : '/',
+    // publicPath: process.env.NODE_ENV === 'production'
+    //     ? '/static'
+    //     : '/',
     // The app will be deployed to the backend/static directory when
     // npm run build
-    outputDir: path.resolve(__dirname, "../../backend/static"),
-    assetsDir: "."
+    // outputDir: path.resolve(__dirname, "../../backend/static"),
+    // assetsDir: "."
 
 }

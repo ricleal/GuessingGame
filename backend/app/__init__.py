@@ -17,11 +17,11 @@ def create_app(config_class=Config):
     """Construct the core application.
     The static files will be in static in root of the project"""
     app = Flask(__name__,
-                static_url_path='/static',
-                static_folder=os.path.join(
-                    os.path.dirname(__file__),
-                    "..", "static"
-                ))
+                # static_url_path='/static',
+                # static_folder=os.path.join(
+                #     os.path.dirname(__file__),
+                #     "..", "static")
+                )
     app.config.from_object(config_class)
     app.register_blueprint(api)
 
