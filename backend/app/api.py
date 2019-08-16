@@ -60,8 +60,10 @@ def guess(number):
     value = session.get('guess', None)
     if value is not None:
         guess = value == number
+        session.pop('guess')
         if guess:
-            del session['guess']
-        return jsonify(success=True, guess=guess)
+            return jsonify(success=True, message="You won!")
+        else:
+            return jsonify(success=True, message="You lost!")
     else:
         return jsonify(success=False)
