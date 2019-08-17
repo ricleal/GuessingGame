@@ -18,13 +18,13 @@ def test_app_won(app):
     response = c.get('/api/start/{}/{}'.format(minimum, maximum))
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
 
     # even
     response = c.get('/api/even')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
     assert response_dic.get('even') is not None
     assert type(response_dic['even']) == bool
 
@@ -32,7 +32,7 @@ def test_app_won(app):
     response = c.get('/api/odd')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
     assert response_dic.get('odd') is not None
     assert type(response_dic['odd']) == bool
 
@@ -40,7 +40,7 @@ def test_app_won(app):
     response = c.get('/api/greater/5')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
     assert response_dic.get('greater') is not None
     assert type(response_dic['greater']) == bool
 
@@ -48,7 +48,7 @@ def test_app_won(app):
     response = c.get('/api/less/5')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
     assert response_dic.get('less') is not None
     assert type(response_dic['less']) == bool
 
@@ -58,7 +58,7 @@ def test_app_won(app):
         response = c.get('/api/guess/{}'.format(value))
         response_dic = _get_response_data_as_dict(response)
         assert response.status_code == 200
-        assert response_dic['success'] == True
+        assert response_dic['success']
         assert response_dic['message'] == 'You won!'
     # we need to query the session again. looks like its cached
     with c.session_transaction() as session:
@@ -68,7 +68,7 @@ def test_app_won(app):
     response = c.get('/api/even')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('message') is None
 
 
@@ -85,7 +85,7 @@ def test_app_lost(app):
     response = c.get('/api/start/{}/{}'.format(minimum, maximum))
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == True
+    assert response_dic['success']
 
     # guess
     with c.session_transaction() as session:
@@ -93,7 +93,7 @@ def test_app_lost(app):
         response = c.get('/api/guess/{}'.format(value+1))
         response_dic = _get_response_data_as_dict(response)
         assert response.status_code == 200
-        assert response_dic['success'] == True
+        assert response_dic['success']
         assert response_dic['message'] == 'You lost!'
     with c.session_transaction() as session:
         assert session.get('guess') is None
@@ -111,33 +111,33 @@ def test_app_failure(app):
     response = c.get('/api/even')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('even') is None
 
     # odd
     response = c.get('/api/odd')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('even') is None
 
     # greater
     response = c.get('/api/greater/5')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('even') is None
 
     # less
     response = c.get('/api/less/5')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('even') is None
 
     # guess
     response = c.get('/api/guess/123')
     response_dic = _get_response_data_as_dict(response)
     assert response.status_code == 200
-    assert response_dic['success'] == False
+    assert not response_dic['success']
     assert response_dic.get('message') is None

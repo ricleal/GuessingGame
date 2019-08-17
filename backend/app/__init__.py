@@ -1,7 +1,9 @@
-import os
 import logging
+
 from flask import Flask
+
 from .config import Config
+
 from.api import api
 '''
 This module fires up the application.
@@ -16,12 +18,7 @@ logger = logging.getLogger(__name__)
 def create_app(config_class=Config):
     """Construct the core application.
     The static files will be in static in root of the project"""
-    app = Flask(__name__,
-                # static_url_path='/static',
-                # static_folder=os.path.join(
-                #     os.path.dirname(__file__),
-                #     "..", "static")
-                )
+    app = Flask(__name__)
     app.config.from_object(config_class)
     app.register_blueprint(api)
 

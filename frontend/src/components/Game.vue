@@ -170,15 +170,14 @@
       <v-flex mb-12>
         <v-card max-width="400" class="mx-auto">
           <v-card-title>{{message}}</v-card-title>
-        
 
-        <div class="text-center">
-          <v-badge>
-            <template v-slot:badge>{{counterComputed}}</template>
-            <v-icon v-if="counterComputed == 0">lock_open</v-icon>
-            <v-icon v-else>lock</v-icon>
-          </v-badge>
-        </div>
+          <div class="text-center">
+            <v-badge>
+              <template v-slot:badge>{{counterComputed}}</template>
+              <v-icon v-if="counterComputed == 0">lock_open</v-icon>
+              <v-icon v-else>lock</v-icon>
+            </v-badge>
+          </div>
         </v-card>
       </v-flex>
     </v-layout>
