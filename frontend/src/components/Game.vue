@@ -2,7 +2,7 @@
   <v-container class="grey lighten-5">
     <v-row>
       <v-col cols="12">
-        
+        <!-- content title -->
         <v-row align="start" justify="center" class="grey lighten-5">
           <h1 class="display-2 font-weight-bold mb-3">Welcome to the Guessing Game</h1>
           <p class="subheading font-weight-regular">
@@ -11,6 +11,7 @@
           </p>
         </v-row>
 
+        <!--  Min and Max -->
         <v-form ref="formStart" @submit.prevent v-model="formStartValid">
           <v-row align="start" justify="center" class="grey lighten-5">
             <v-col cols="4" md="2">
@@ -63,7 +64,7 @@
           <v-row align="start" justify="center" class="grey lighten-5">
             <p class="font-weight-regular">Choose one of the options below to guess the number</p>
           </v-row>
-
+          <!-- Less than -->
           <v-form @submit.prevent ref="formLess" v-model="formLessValid">
             <v-row align="start" justify="center" class="grey lighten-5">
               <v-col cols="6" md="2">
@@ -85,7 +86,7 @@
               </v-col>
             </v-row>
           </v-form>
-
+          <!-- Greather than -->
           <v-form @submit.prevent ref="formGreater" v-model="formGreaterValid">
             <v-row align="start" justify="center" class="grey lighten-5">
               <v-col cols="6" md="2">
@@ -107,7 +108,7 @@
               </v-col>
             </v-row>
           </v-form>
-
+          <!-- Odd and Even -->
           <v-row align="start" justify="center" class="grey lighten-5">
             <v-col cols="6" md="2">
               <v-btn @click="isOdd">Is it odd?</v-btn>
@@ -169,7 +170,7 @@
 
     <!-- Won / Lost dialog -->
     <div class="text-center">
-      <v-dialog v-model="dialog" width="500">
+      <v-dialog v-model="dialog" width="500" @keydown.enter="dialog = false">
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>You tried to guess it and...</v-card-title>
           <v-card-text>
@@ -181,7 +182,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @keyup.enter="dialog = false" @click="dialog = false">OK</v-btn>
+            <v-btn color="primary" text @click="dialog = false">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -241,6 +242,7 @@ export default {
         ? ""
         : "Minimum must be inferior to Maximum";
     },
+
     startGame: function() {
       Vue.axios
         .get(`/api/start/${this.minimumValue}/${this.maximumValue}`)
@@ -282,6 +284,7 @@ export default {
           console.log(error);
         });
     },
+
     isOdd: function() {
       Vue.axios
         .get("/api/odd")
@@ -323,6 +326,7 @@ export default {
           console.log(error);
         });
     },
+
     isGreaterThan: function() {
       Vue.axios
         .get(`/api/greater/${this.greaterThanValue}`)

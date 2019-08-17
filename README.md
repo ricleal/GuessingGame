@@ -30,16 +30,38 @@ variables used by the back end server).  See `env.base` for a template.
 If the file / environment variable does not exist, the default argument 
 (the second) of `os.getenv` is used. See `app/config.py` for more details.
 
+**Development:**
+
 Fire up the app in development:
 ```sh
 python run_dev.py
 ```
-To test: http://localhost:5000/api/start/1/10
+To test go to: http://localhost:5000/api/start/1/10
 
-In production:
+Using the `curl` cookies feature one can play the game:
+
 ```sh
-gunicorn -w <number of workers> --bind <IP>:<port> run_prod:app
+# create a game
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/start/1/10
+# is it odd?
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/odd
+# is it even?
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/even
+# it it less than 4?
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/less/4
+# it it greater than 5?
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/greater/6
+# it it equal to 5?
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/guess/5
+```
 
+**Production:**
+
+In production use `gunicorn` (you can also install and use `uWSGI` or other wsgi server):
+
+```sh
+# Example
+# gunicorn -w <number of workers> --bind <IP>:<port> run_prod:app
 # E.g.:
 gunicorn -w 2 --bind localhost:8000 run_prod:app
 ```
