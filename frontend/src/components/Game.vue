@@ -3,15 +3,16 @@
     <v-layout text-center wrap>
       <v-flex mb-12>
         <h1 class="display-2 font-weight-bold mb-3">Welcome to the Guessing Game</h1>
-        <p
-          class="subheading font-weight-regular"
-        >To start a game please selected a boundary for guessing a number</p>
+        <p class="subheading font-weight-regular">
+          To start a game please selected a boundary for guessing a number and the number of tries
+          until you can guess the number.
+        </p>
       </v-flex>
     </v-layout>
 
     <v-form ref="formStart" @submit.prevent v-model="formStartValid">
       <v-layout row align-center justify-space-between>
-        <v-flex md2 xs12 offset-md3>
+        <v-flex md2 xs12 offset-md2>
           <v-text-field
             type="number"
             label="Minimum"
@@ -37,9 +38,23 @@
           ></v-text-field>
         </v-flex>
         <v-flex md2 xs12>
-          <v-btn type="sumit" :disabled="!formStartValid" @click="startGame">Start the Game</v-btn>
+          <v-text-field
+            type="number"
+            label="Tries"
+            v-model="triesValue"
+            :rules="triesRules"
+            min="1"
+            max="50"
+            id="triesId"
+            required
+          ></v-text-field>
         </v-flex>
         <v-flex md2 />
+      </v-layout>
+      <v-layout row align-center justify-space-between>
+        <v-flex md3 xs12 offset-md5>
+          <v-btn type="submit" :disabled="!formStartValid" @click="startGame">Start a new game</v-btn>
+        </v-flex>
       </v-layout>
     </v-form>
 
@@ -51,9 +66,7 @@
       </v-layout>
       <v-layout text-center wrap>
         <v-flex mb-12>
-          <p
-            class="subheading font-weight-regular"
-          >Choose one of the options below to guess the number</p>
+          <p class="font-weight-regular">Choose one of the options below to guess the number</p>
         </v-flex>
       </v-layout>
 
@@ -69,7 +82,12 @@
             ></v-text-field>
           </v-flex>
           <v-flex md3 xs12>
-            <v-btn type="submit" :disabled="!formLessValid" @click="isLessThan" color="primary">Less than</v-btn>
+            <v-btn
+              type="submit"
+              :disabled="!formLessValid"
+              @click="isLessThan"
+              color="primary"
+            >Less than</v-btn>
           </v-flex>
           <v-flex md1 xs12 />
         </v-layout>
@@ -87,7 +105,12 @@
             ></v-text-field>
           </v-flex>
           <v-flex md3 xs12>
-            <v-btn type="submit" :disabled="!formGreaterValid" @click="isGreaterThan" color="primary">Greater than</v-btn>
+            <v-btn
+              type="submit"
+              :disabled="!formGreaterValid"
+              @click="isGreaterThan"
+              color="primary"
+            >Greater than</v-btn>
           </v-flex>
           <v-flex md1 xs12 />
         </v-layout>
@@ -97,60 +120,78 @@
         <v-flex md12>
           <p>&nbsp;</p>
         </v-flex>
-        <v-flex md1 xs12 offset-md4>
-          <v-btn @click="isOdd">Is Odd?</v-btn>
+        <v-flex md2 xs12 offset-md4>
+          <v-btn @click="isOdd">Is it odd?</v-btn>
         </v-flex>
-        <v-flex md1 xs12>
-          <v-btn @click="isEven">Is Even?</v-btn>
+        <v-flex md2 xs12>
+          <v-btn @click="isEven">Is it even?</v-btn>
         </v-flex>
         <v-flex md3 xs12 />
       </v-layout>
 
-      <v-form ref="formGuess" @submit.prevent v-model="formGuessValid">
-        <v-layout row align-center justify-space-around>
-          <v-flex md12>
-            <p>&nbsp;</p>
-          </v-flex>
-          <v-flex md1 xs12 offset-md4>
-            <v-text-field
-              :rules="guessRules"
-              v-model="guessValue"
-              type="number"
-              label="Guess?"
-              required
-            ></v-text-field>
-          </v-flex>
-          <v-flex md1 xs12>
-            <v-btn
-              type="submit"
-              :disabled="!formGuessValid"
-              @click="guess"
-              color="warning"
-            >Guess it?</v-btn>
-          </v-flex>
-          <v-flex md3 xs12 />
-        </v-layout>
-      </v-form>
+      <div v-if="counterComputed == 0">
+        <v-form ref="formGuess" @submit.prevent v-model="formGuessValid">
+          <v-layout text-center wrap>
+            <v-flex md12>
+              <p>&nbsp;</p>
+            </v-flex>
+            <v-flex mb-12>
+              <p>Guess an answer?</p>
+            </v-flex>
+          </v-layout>
+          <v-layout row align-center justify-space-around>
+            <v-flex md1 xs12 offset-md4>
+              <v-text-field
+                :rules="guessRules"
+                v-model="guessValue"
+                type="number"
+                label="Guess?"
+                required
+              ></v-text-field>
+            </v-flex>
+            <v-flex md1 xs12>
+              <v-btn
+                type="submit"
+                :disabled="!formGuessValid"
+                @click="guess"
+                color="warning"
+              >Guess it?</v-btn>
+            </v-flex>
+            <v-flex md3 xs12 />
+          </v-layout>
+        </v-form>
+      </div>
     </div>
+
     <v-layout text-center wrap>
       <v-flex md12>
         <p>&nbsp;</p>
       </v-flex>
       <v-flex mb-12>
-        <h2>{{message}}</h2>
+        <v-card max-width="400" class="mx-auto">
+          <v-card-title>{{message}}</v-card-title>
+        
+
+        <div class="text-center">
+          <v-badge>
+            <template v-slot:badge>{{counterComputed}}</template>
+            <v-icon v-if="counterComputed == 0">lock_open</v-icon>
+            <v-icon v-else>lock</v-icon>
+          </v-badge>
+        </div>
+        </v-card>
       </v-flex>
     </v-layout>
 
     <div class="text-center">
       <v-dialog v-model="dialog" width="500">
         <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>Congratulations!!!</v-card-title>
+          <v-card-title class="headline grey lighten-2" primary-title>You tried to guess it and...</v-card-title>
           <v-card-text>
             <br />
-            You guessed the number: {{guessValue}}. Now you can play another game!
+            <strong>{{this.winMessage }}</strong> Now you can play another game!
           </v-card-text>
           <v-divider></v-divider>
-
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" text @keyup.enter="dialog = false" @click="dialog = false">OK</v-btn>
@@ -170,11 +211,15 @@ export default {
   data: () => ({
     // start game
     minimumValue: 1,
-    maximumValue: 50,
+    maximumValue: 20,
+    triesValue: 5,
     minimumRules: [v => !!v || "Minimum is required"],
     maximumRules: [v => !!v || "Maximum is required"],
-    formStartValid: true,
+    triesRules: [v => !!v || "Tries is required"],
+    formStartValid: true, // all forms start valid
     start: false, // If false (the game has not started) the game controls are hidden
+    counter: 0, // counts the number of tries before one can guess the number
+    winMessage: "", //Message displayed when one guesses the number
     // Greater
     greaterThanValue: null,
     greaterRules: [v => !!v || "Greater than value is required"],
@@ -191,6 +236,17 @@ export default {
     // This gives feedback during the game
     message: ""
   }),
+  computed: {
+    // because in depends on the input form and on the counter it as to be calculated in real time
+    counterComputed: function() {
+      let value = this.triesValue - this.counter;
+      if (value >= 0) {
+        return value;
+      } else {
+        return 0;
+      }
+    }
+  },
   methods: {
     // error message used in the start game to make sure min < max
     validMinMax: function() {
@@ -209,7 +265,9 @@ export default {
             this.message = "Something wrong!";
           } else {
             this.start = true;
-            this.message = `Start: Guessing a number from ${this.minimumValue} to ${this.maximumValue}.`;
+            this.message = `Guessing a number from ${this.minimumValue} to ${this.maximumValue}.`;
+            this.winMessage = "";
+            this.counter = 0;
           }
         })
         .catch(error => {
@@ -228,7 +286,8 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            this.message = `Is even? ${response.data["even"]}!`;
+            this.message = `Is it even? ${response.data["even"]}!`;
+            this.counter++;
           }
         })
         .catch(error => {
@@ -246,7 +305,8 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            this.message = `Is odd? ${response.data["odd"]}!`;
+            this.message = `Is it odd? ${response.data["odd"]}!`;
+            this.counter++;
           }
         })
         .catch(error => {
@@ -265,7 +325,7 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            this.message = `Is less than ${this.lessThanValue}? ${
+            this.message = `Is it less than ${this.lessThanValue}? ${
               response.data["less"]
             }!`;
           }
@@ -285,9 +345,10 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            this.message = `Is greater than ${this.greaterThanValue}? ${
+            this.message = `Is it greater than ${this.greaterThanValue}? ${
               response.data["greater"]
             }!`;
+            this.counter++;
           }
         })
         .catch(error => {
@@ -306,13 +367,11 @@ export default {
           ) {
             this.message = "Something wrong!";
           } else {
-            if (response.data["guess"]) {
-              this.dialog = true;
-              this.start = false;
-              this.message = "";
-            } else {
-              this.message = "You did not guess it :(";
-            }
+            this.dialog = true;
+            this.start = false;
+            this.message = "";
+            this.winMessage = response.data["message"];
+            this.counter = 0;
           }
         })
         .catch(error => {
