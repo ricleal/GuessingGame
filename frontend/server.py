@@ -3,8 +3,18 @@ import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from urllib import error, request
 
+'''
+Simple HTTP server and proxy based on the python http.server.HTTPServer
+The proxy will make the http calls (original headers included) if the routes
+match the key of the dictionary `routes`.
+'''
+
+
+# host and port where the server will run
 host = "localhost"
 port = 8080
+
+# forward routes rules
 routes = {
     # '/api': 'http://localhost:5000',  # dev
     '/api': 'http://localhost:8000',  # prod
