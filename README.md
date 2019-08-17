@@ -4,7 +4,10 @@ Guessing Game Take-Home Problem
 
 ## Installation
 
-### Backend 
+### Backend
+
+The backend is implemented in Python using Flask (an extensible web 
+microframework for building web applications with Python).
 
 **Requirements:**
 - Python 3.6
@@ -98,12 +101,16 @@ tests/test_api.py::test_app_failure PASSED                                [100%]
 
 ### Front end
 
-The front end may not require `npm`/`nodejs` to run. See below.
+The frontend is implemented using Vue.js and Vuetify (a Material Design component
+framework for Vue.js).
+The HTTP requests to the server are performed with `axios`: an HTTP client for the browser.
 
 **Requirements:**
 - nodejs 12.7
 - npm 6.10.3
 It was tested with these versions. It might work with different versions.
+
+The front end may not require `npm`/`nodejs` to run. See below.
 
 Install the requirements
 
