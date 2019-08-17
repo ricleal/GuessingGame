@@ -3,12 +3,13 @@ import os
 import dotenv
 
 '''
-Configure the several enviroments where this application can run.
-Note that heroku doesn't like `.env` files. They have to copied every time
-the app is deployed.
-For test purposes use:
-`os.getenv(<env variable>, <default>)`
-with a default value
+Configure the several environments where this application can run.
+
+If deployed in heroku, note that everytime a deployment from github
+happens, the directory where the app sits gets deleted, therefore `.env` file
+disappears. All in one the `.env` files has to copied every time the app is
+deployed. For this reason, if the `.env` file does not exist `os.getenv` has
+a second argument as default: `os.getenv(<env variable>, <default>)`
 '''
 
 dotenv.load_dotenv()

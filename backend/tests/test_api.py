@@ -74,7 +74,7 @@ def test_app_won(app):
 
 def test_app_lost(app):
     '''
-    Test a simple you lost
+    Test a simple: "you lost"
     '''
 
     c = app.test_client()
@@ -101,7 +101,7 @@ def test_app_lost(app):
 
 def test_app_failure(app):
     '''
-    No game is created
+    No game is created (e.g. the `guess` is not stored in the session)
     All methods should return {'success': 'false'}
     '''
 
