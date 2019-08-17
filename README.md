@@ -56,19 +56,18 @@ To test: http:// 0.0.0.0:8000/static/index.html
 
 ## Front end
 
-Install `vue-cli`:
-```
-npm install -g @vue/cli
-```
 
-https://cli.vuejs.org/
+```
+cd GuessingGame/frontend
+npm install
+```
 
 
 Now there is build for development:
 ```
 npm run serve
 ```
-http://localhost:8080/?
+http://localhost:8080/
 
 or 
 
@@ -100,11 +99,10 @@ Or for production:
 gunicorn -w <number of workers> --bind <IP>:<port> run_prod:app
 
 # E.g.:
-gunicorn -w 2 --bind 0.0.0.0:8000 run_prod:app
+gunicorn -w 2 --bind localhost:8000 run_prod:app
 ```
 
-Go to : http://0.0.0.0:8000/static/index.html
-
+Go to : http://localhost:8000/api/start/1/100 (starts the game with random numbers between 1 and 100)
 # tests 
 
 There are only tests for the backend. I did not have time for writting tests for the frontend.
