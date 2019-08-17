@@ -25,8 +25,10 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-If not shipped, create an `.env` file (file with the definition of environment variables). See `env.base` for a template.
-If the file / environment variable does not exist, the default argument (the second) of `os.getenv` is used. See `app/config.py` for more details.
+If not shipped, create a `.env` file (file with the definition of environment
+variables used by the back end server).  See `env.base` for a template.
+If the file / environment variable does not exist, the default argument 
+(the second) of `os.getenv` is used. See `app/config.py` for more details.
 
 Fire up the app in development:
 ```sh
@@ -97,7 +99,7 @@ http://localhost:8080/
 
 Note the back end should be running in development.
 There is proxy route in the `frontend/vue.config.js`. All the requests starting
-`/api` are routed to `http://localhost:5000`.
+with `/api` are routed to `http://localhost:5000`.
 
 To build the production minimized javascript type:
 
