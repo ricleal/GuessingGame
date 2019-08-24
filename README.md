@@ -1,6 +1,6 @@
 # GuessingGame
 
-Guessing Game Take-Home Problem
+Guessing Game Problem
 
 ## Installation
 
