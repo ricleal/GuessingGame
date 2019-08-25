@@ -47,9 +47,9 @@ Using the `curl` cookies feature one can play the game:
 # create a game
 curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/start/1/10
 # is it odd?
-curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/odd
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/odd
 # is it even?
-curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/even
+curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/even
 # it it less than 4?
 curl -c /tmp/cookie_guess_game.txt -b /tmp/cookie_guess_game.txt  http://localhost:5000/api/less/4
 # it it greater than 5?
@@ -108,6 +108,7 @@ The HTTP requests to the server are performed with `axios`: an HTTP client for t
 **Requirements:**
 - nodejs 12.7
 - npm 6.10.3
+
 It was tested with these versions. It might work with different versions.
 
 The front end may not require `npm`/`nodejs` to run. See below.
@@ -124,7 +125,8 @@ To test the development environment:
 ```sh
 npm run serve
 ```
-http://localhost:8080/
+
+Go to: http://localhost:8080/
 
 Note the back end should be running in development.
 There is proxy route in the `frontend/vue.config.js`. All the requests starting
